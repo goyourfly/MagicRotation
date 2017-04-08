@@ -2,6 +2,7 @@ package com.goyourfly.magic.rotation.spirit;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.util.Log;
 
@@ -13,7 +14,6 @@ import java.util.Random;
 
 public class SpiritBall extends Spirit {
     public static final String TAG = "SpiritBall";
-    public static final int RADIUS = 20;
 
 
     private Paint paint;
@@ -43,6 +43,6 @@ public class SpiritBall extends Spirit {
     public void onDraw(Canvas canvas) {
         state.measure();
         Behave behave = getBehave();
-        canvas.drawCircle(behave.matrixValue[2], behave.matrixValue[5], RADIUS, paint);
+        canvas.drawCircle(behave.x,behave.y,behave.scale * RADIUS, paint);
     }
 }

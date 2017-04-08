@@ -1,13 +1,11 @@
 package com.goyourfly.magic.rotation.spirit;
 
-import com.goyourfly.magic.rotation.spirit.Spirit;
-import com.goyourfly.magic.rotation.spirit.State;
-
 /**
  * Created by gaoyufei on 2017/4/7.
  */
 
-public class SmallState extends State {
+public class SmallState extends BaseState {
+    public static final float MIN_SCALE = 1;
     public SmallState(Spirit spirit) {
         super(spirit);
     }
@@ -20,7 +18,6 @@ public class SmallState extends State {
     @Override
     public void measure() {
         super.measure();
-        defaultMeasure();
-        Behave behave = spirit.getBehave();
+        defaultTranslateMeasure();
     }
 }

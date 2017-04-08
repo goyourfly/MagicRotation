@@ -4,7 +4,7 @@ package com.goyourfly.magic.rotation.spirit;
  * Created by gaoyufei on 2017/4/7.
  */
 
-public class MidState extends State {
+public class MidState extends BaseState {
     public MidState(Spirit spirit) {
         super(spirit);
     }
@@ -17,6 +17,7 @@ public class MidState extends State {
     @Override
     public void measure() {
         super.measure();
+        defaultTranslateMeasure();
         Behave behave = spirit.getBehave();
     }
 }

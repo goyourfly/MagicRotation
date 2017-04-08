@@ -11,9 +11,11 @@ import java.util.Random;
  */
 
 public class Behave {
-    float angle = RandomUtils.nextFloat(0,360);
     float angleSpeed = 0;
     float latestTrackRadius = 0;
+
+    float x,y,scale = 1;
+    float angle = RandomUtils.nextFloat(0,360);
 
     Matrix matrix = new Matrix();
     float[] matrixValue = new float[9];

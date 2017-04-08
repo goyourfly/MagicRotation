@@ -50,6 +50,6 @@ public class MagicRotationView  extends View{
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         mHelper.onTouch(event);
-        return super.onTouchEvent(event);
+        return true;
     }
 }
