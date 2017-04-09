@@ -1,6 +1,7 @@
 package com.goyourfly.magic.rotation.spirit;
 
 import android.graphics.Canvas;
+import android.view.MotionEvent;
 
 /**
  * Created by gaoyufei on 2017/4/7.
@@ -17,6 +18,7 @@ public abstract class Spirit {
     public BaseState stateMidToSmall = new MidToSmallState(this);
     public BaseState stateMidToLarge = new MidToLargeState(this);
     public BaseState stateLargeToMid = new LargeToMidState(this);
+    public BaseState stateLargeToSmall = new LargeToSmallState(this);
 
     protected BaseState state = stateSmall;
     protected Behave behave = new Behave();
@@ -26,15 +28,27 @@ public abstract class Spirit {
     // 轨道左右最大限度随机性
     protected float trackRadiusSpace = 100;
 
-    // 精灵的位置
-    public abstract void setCenter(float x, float y);
 
-    public abstract void setTrackRadius(float radius);
+    // 精灵的位置
+    public void setCenter(float x, float y) {
+        this.centerX = x;
+        this.centerY = y;
+    }
+
+    public void setTrackRadius(float radius) {
+        this.trackRadius = radius;
+        ((LargeState)stateLarge).setTrackRadius(radius);
+    }
+
 
     // 精灵画自己
     public abstract void onDraw(Canvas canvas);
 
     public void setState(BaseState state) {
+        if(this.state != null){
+            this.state.stateOut();
+        }
+        state.stateIn();
         this.state = state;
     }
 
@@ -62,4 +76,52 @@ public abstract class Spirit {
     public float getRadius(){
         return behave.scale * RADIUS;
     }
+
+    public void onTouchEvent(MotionEvent event){
+        switch (isInRange(event)){
+            case CLICK_IN:
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    transform();
+                }else if(event.getAction() == MotionEvent.ACTION_MOVE){
+                    if(state == stateSmall) {
+                        transform();
+                    }
+                }
+            case CLICK_NEAR:
+//                setState(stateSmallToMid);
+                break;
+            case CLICK_NOTHING:
+//                setState(stateMidToSmall);
+                if(state == stateLarge){
+                    transform();
+                }
+                break;
+        }
+    }
+
+    public int isInRange(MotionEvent event){
+        float figX = event.getX();
+        float figY = event.getY();
+
+        float x = getX();
+        float y = getY();
+        float radius = getRadius();
+
+        if(Math.abs((figX - x)) < radius && Math.abs((figY - y)) < radius){
+            return CLICK_IN;
+        }
+
+        if(Math.abs((figX - x)) < radius * 3 && Math.abs((figY - y)) < radius * 3){
+            return CLICK_NEAR;
+        }
+
+        return CLICK_NOTHING;
+    }
+
+    // 点击到物体
+    public static final int CLICK_IN = 1;
+    //　靠近物体
+    public static final int CLICK_NEAR = 2;
+    // 无
+    public static final int CLICK_NOTHING = 3;
 }

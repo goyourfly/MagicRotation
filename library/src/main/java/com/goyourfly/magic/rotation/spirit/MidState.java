@@ -5,13 +5,14 @@ package com.goyourfly.magic.rotation.spirit;
  */
 
 public class MidState extends BaseState {
+    public static final float SCALE = 3;
     public MidState(Spirit spirit) {
         super(spirit);
     }
 
     @Override
     public void transform() {
-        setState(spirit.stateMidToSmall);
+        setState(spirit.stateMidToLarge);
     }
 
     @Override

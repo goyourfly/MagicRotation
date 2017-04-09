@@ -5,7 +5,7 @@ package com.goyourfly.magic.rotation.spirit;
  */
 
 public class SmallState extends BaseState {
-    public static final float MIN_SCALE = 1;
+    public static final float SCALE = 1;
     public SmallState(Spirit spirit) {
         super(spirit);
     }

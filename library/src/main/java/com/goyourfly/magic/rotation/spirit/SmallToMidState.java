@@ -5,7 +5,6 @@ package com.goyourfly.magic.rotation.spirit;
  */
 
 public class SmallToMidState extends BaseState {
-    public static final float MAX_SCALE = 3;
     public static final float SCALE_SPEED = 0.1f;
 
     public SmallToMidState(Spirit spirit) {
@@ -23,7 +22,7 @@ public class SmallToMidState extends BaseState {
         defaultTranslateMeasure();
         Behave behave = spirit.getBehave();
 
-        if(behave.scale < MAX_SCALE){
+        if(behave.scale < MidState.SCALE){
             behave.scale += SCALE_SPEED;
         }else {
             transform();

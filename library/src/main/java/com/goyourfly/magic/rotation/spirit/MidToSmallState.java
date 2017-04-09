@@ -21,7 +21,7 @@ public class MidToSmallState extends BaseState {
         defaultTranslateMeasure();
         Behave behave = spirit.getBehave();
 
-        if(behave.scale > SmallState.MIN_SCALE){
+        if(behave.scale > SmallState.SCALE){
             behave.scale -= SCALE_SPEED;
         }else {
             transform();

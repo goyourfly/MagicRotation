@@ -96,52 +96,31 @@ public class MagicHelperImp implements MagicHelper {
 
     @Override
     public void onTouch(MotionEvent event) {
-
-            for (Spirit spirit : mSpirits){
-                switch (isInRange(event,spirit)){
-                    case CLICK_IN:
-                    case CLICK_NEAR:
-                        spirit.setState(spirit.stateSmallToMid);
-                        break;
-                    case CLICK_NOTHING:
-                        spirit.setState(spirit.stateMidToSmall);
-                        break;
-                }
-            }
-
-
-        if(event.getAction() == MotionEvent.ACTION_DOWN){
-            mHandler.removeCallbacks(mSmallCallback);
+        for (Spirit spirit :
+                mSpirits) {
+            spirit.onTouchEvent(event);
         }
-        if(event.getAction() == MotionEvent.ACTION_UP
-                || event.getAction() == MotionEvent.ACTION_CANCEL){
-            mHandler.postDelayed(mSmallCallback,2000);
-        }
+
+//            for (Spirit spirit : mSpirits){
+//                switch (isInRange(event,spirit)){
+//                    case CLICK_IN:
+//                    case CLICK_NEAR:
+//                        spirit.setState(spirit.stateSmallToMid);
+//                        break;
+//                    case CLICK_NOTHING:
+//                        spirit.setState(spirit.stateMidToSmall);
+//                        break;
+//                }
+//            }
+//
+//
+//        if(event.getAction() == MotionEvent.ACTION_DOWN){
+//            mHandler.removeCallbacks(mSmallCallback);
+//        }
+//        if(event.getAction() == MotionEvent.ACTION_UP
+//                || event.getAction() == MotionEvent.ACTION_CANCEL){
+//            mHandler.postDelayed(mSmallCallback,2000);
+//        }
     }
 
-    public int isInRange(MotionEvent event,Spirit spirit){
-        float figX = event.getX();
-        float figY = event.getY();
-
-        float x = spirit.getX();
-        float y = spirit.getY();
-        float radius = spirit.getRadius();
-
-        if(Math.abs((figX - x)) < radius && Math.abs((figY - y)) < radius){
-            return CLICK_IN;
-        }
-
-        if(Math.abs((figX - x)) < radius * 3 && Math.abs((figY - y)) < radius * 3){
-            return CLICK_NEAR;
-        }
-
-        return CLICK_NOTHING;
-    }
-
-    // 点击到物体
-    public static final int CLICK_IN = 1;
-    //　靠近物体
-    public static final int CLICK_NEAR = 2;
-    // 无
-    public static final int CLICK_NOTHING = 3;
 }

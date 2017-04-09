@@ -27,6 +27,15 @@ public abstract class BaseState {
     // 切换状态
     public abstract void transform();
 
+    // 开始进入这个状态
+    public void stateIn(){
+
+    }
+
+    // 离开这个状态
+    public void stateOut(){
+
+    }
 
     // 每个实现Measure要强制调用super.measure();
     public void measure() {

@@ -28,16 +28,7 @@ public class SpiritBall extends Spirit {
         paint.setStyle(Paint.Style.STROKE);
     }
 
-    @Override
-    public void setCenter(float x, float y) {
-        this.centerX = x;
-        this.centerY = y;
-    }
 
-    @Override
-    public void setTrackRadius(float radius) {
-        this.trackRadius = radius;
-    }
 
     @Override
     public void onDraw(Canvas canvas) {
