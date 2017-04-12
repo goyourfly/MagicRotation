@@ -5,7 +5,7 @@ package com.goyourfly.magic.rotation.spirit;
  */
 
 public class SmallToMidState extends BaseState {
-    public static final float SCALE_SPEED = 0.1f;
+    public static final float SCALE_SPEED = 0.05f;
 
     public SmallToMidState(Spirit spirit) {
         super(spirit);

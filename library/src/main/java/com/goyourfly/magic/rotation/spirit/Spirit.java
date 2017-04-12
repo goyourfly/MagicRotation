@@ -3,12 +3,14 @@ package com.goyourfly.magic.rotation.spirit;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 
+import com.goyourfly.magic.rotation.Component;
+
 /**
  * Created by gaoyufei on 2017/4/7.
  * 这下面是喜欢乱动的小精灵球
  */
 
-public abstract class Spirit {
+public abstract class Spirit implements Component {
     public static final int RADIUS = 20;
     // 精灵一共有以下几种状态
     public BaseState stateSmall = new SmallState(this);
@@ -35,9 +37,10 @@ public abstract class Spirit {
         this.centerY = y;
     }
 
-    public void setTrackRadius(float radius) {
+    public void setTrackRadius(float radius, float ringWidth) {
         this.trackRadius = radius;
-        ((LargeState)stateLarge).setTrackRadius(radius);
+        this.trackRadiusSpace = ringWidth / 2;
+        ((LargeState) stateLarge).setTrackRadius(radius - trackRadiusSpace - RADIUS - 8);
     }
 
 
@@ -45,11 +48,15 @@ public abstract class Spirit {
     public abstract void onDraw(Canvas canvas);
 
     public void setState(BaseState state) {
-        if(this.state != null){
+        if (this.state != null) {
             this.state.stateOut();
         }
         state.stateIn();
         this.state = state;
+    }
+
+    public BaseState getState(){
+        return state;
     }
 
     Behave getBehave() {
@@ -61,29 +68,30 @@ public abstract class Spirit {
     }
 
 
-    public float getX(){
+    public float getX() {
         return behave.x;
     }
 
-    public float getY(){
+    public float getY() {
         return behave.y;
     }
 
     /**
      * 返回当时实际的半径
+     *
      * @return
      */
-    public float getRadius(){
+    public float getRadius() {
         return behave.scale * RADIUS;
     }
 
-    public void onTouchEvent(MotionEvent event){
-        switch (isInRange(event)){
+    public void onTouchEvent(MotionEvent event) {
+        switch (isInRange(event)) {
             case CLICK_IN:
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     transform();
-                }else if(event.getAction() == MotionEvent.ACTION_MOVE){
-                    if(state == stateSmall) {
+                } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    if (state == stateSmall) {
                         transform();
                     }
                 }
@@ -92,14 +100,14 @@ public abstract class Spirit {
                 break;
             case CLICK_NOTHING:
 //                setState(stateMidToSmall);
-                if(state == stateLarge){
+                if (state == stateLarge) {
                     transform();
                 }
                 break;
         }
     }
 
-    public int isInRange(MotionEvent event){
+    public int isInRange(MotionEvent event) {
         float figX = event.getX();
         float figY = event.getY();
 
@@ -107,11 +115,11 @@ public abstract class Spirit {
         float y = getY();
         float radius = getRadius();
 
-        if(Math.abs((figX - x)) < radius && Math.abs((figY - y)) < radius){
+        if (Math.abs((figX - x)) < radius && Math.abs((figY - y)) < radius) {
             return CLICK_IN;
         }
 
-        if(Math.abs((figX - x)) < radius * 3 && Math.abs((figY - y)) < radius * 3){
+        if (Math.abs((figX - x)) < radius * 3 && Math.abs((figY - y)) < radius * 3) {
             return CLICK_NEAR;
         }
 

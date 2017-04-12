@@ -3,16 +3,19 @@ package com.goyourfly.magic.rotation;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.widget.Toast;
 
+import com.goyourfly.magic.rotation.line.Line;
 import com.goyourfly.magic.rotation.spirit.Spirit;
 import com.goyourfly.magic.rotation.spirit.SpiritBall;
+import com.goyourfly.magic.rotation.utils.RandomUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by gaoyufei on 2017/4/7.
@@ -20,7 +23,7 @@ import com.goyourfly.magic.rotation.spirit.SpiritBall;
 
 public class MagicHelperImp implements MagicHelper {
     // 环形轨道的宽度
-    private static final int mMaxRandomSize = 200;
+    private static final int mRingWidth = 150;
     Context mContext;
     // View的宽度和高度
     int mWidth;
@@ -32,7 +35,8 @@ public class MagicHelperImp implements MagicHelper {
 
     Paint mPaintHelpLine;
 
-    Spirit[] mSpirits = new Spirit[20];
+    Spirit[] mSpirits = new Spirit[30];
+    List<Line> mLine = new ArrayList<>();
 
     Handler mHandler = new Handler();
 
@@ -45,9 +49,11 @@ public class MagicHelperImp implements MagicHelper {
         mPaintHelpLine.setStrokeWidth(1);
         mPaintHelpLine.setStyle(Paint.Style.STROKE);
 
-        for (int i = 0; i < mSpirits.length; i++){
+        for (int i = 0; i < mSpirits.length; i++) {
             mSpirits[i] = new SpiritBall();
         }
+
+
     }
 
     @Override
@@ -64,23 +70,40 @@ public class MagicHelperImp implements MagicHelper {
             int size = Math.min(width, height);
             mOuterBound = new RectF(paddingLeft, paddingTop, size - paddingRight, size - paddingBottom);
             mInnerBound = new RectF(mOuterBound);
-            mInnerBound.inset(mMaxRandomSize, mMaxRandomSize);
+            mInnerBound.inset(mRingWidth, mRingWidth);
 
-            for (Spirit spirit : mSpirits){
+            for (Spirit spirit : mSpirits) {
                 spirit.setCenter(mInnerBound.centerX(), mInnerBound.centerY());
-                spirit.setTrackRadius((mInnerBound.width() + mOuterBound.width()) / 4);
+                spirit.setTrackRadius((mInnerBound.width() + mOuterBound.width()) / 4, mRingWidth);
+
             }
 
+            for (int i = 0; i < mSpirits.length; i++) {
+                int from = i;
+                int num = RandomUtils.nextInt(2, 5);
+                for (int j = 0; j < num; j++) {
+                    int to = from + RandomUtils.nextInt(1, 6);
+                    to = to % mSpirits.length;
+                    Line line = new Line(mSpirits[from], mSpirits[to], mInnerBound);
+                    if (!mLine.contains(line)) {
+                        mLine.add(line);
+                    }
+                }
+            }
         }
     }
 
     @Override
     public void onDraw(Canvas canvas) {
         //绘制两个限制小球移动范围的圆环
-        canvas.drawCircle(mInnerBound.centerX(), mInnerBound.centerY(), mInnerBound.width() / 2, mPaintHelpLine);
-        canvas.drawCircle(mOuterBound.centerX(), mOuterBound.centerY(), mOuterBound.width() / 2, mPaintHelpLine);
+//        canvas.drawCircle(mInnerBound.centerX(), mInnerBound.centerY(), mInnerBound.width() / 2, mPaintHelpLine);
+//        canvas.drawCircle(mOuterBound.centerX(), mOuterBound.centerY(), mOuterBound.width() / 2, mPaintHelpLine);
 
-        for (Spirit spirit : mSpirits){
+        for (Line line : mLine) {
+            line.onDraw(canvas);
+        }
+
+        for (Spirit spirit : mSpirits) {
             spirit.onDraw(canvas);
         }
     }
@@ -88,7 +111,7 @@ public class MagicHelperImp implements MagicHelper {
     private Runnable mSmallCallback = new Runnable() {
         @Override
         public void run() {
-            for (Spirit spirit : mSpirits){
+            for (Spirit spirit : mSpirits) {
                 spirit.setState(spirit.stateMidToSmall);
             }
         }

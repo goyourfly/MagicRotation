@@ -42,7 +42,7 @@ public abstract class BaseState {
         final Behave behave = spirit.getBehave();
         if (animatorAngle == null
                 || !animatorAngle.isRunning()) {
-            animatorAngle = ValueAnimator.ofFloat(behave.angleSpeed, RandomUtils.nextFloat(0, 0.2f));
+            animatorAngle = ValueAnimator.ofFloat(behave.angleSpeed, RandomUtils.nextFloat(0, 0.4f));
             animatorAngle.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
