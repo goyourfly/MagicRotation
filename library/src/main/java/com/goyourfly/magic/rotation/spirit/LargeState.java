@@ -18,7 +18,7 @@ public class LargeState  extends BaseState {
 
     @Override
     public void transform() {
-        if(RandomUtils.nextInt(0,10) < 5) {
+        if(RandomUtils.nextInt(0,10) < 0) {
             setState(spirit.stateLargeToMid);
         }else {
             setState(spirit.stateLargeToSmall);
